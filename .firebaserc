@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "trending-bedd2",
+    "prod": "trending-bedd2"
+  },
+  "targets": {}
+}
