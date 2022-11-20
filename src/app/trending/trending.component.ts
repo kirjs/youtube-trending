@@ -1,7 +1,8 @@
 import { Component, ɵdetectChanges } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { YoutubeService } from '../admin/services/youtube.service';
+import { TrendingService } from "./trending.service";
+import { CommonModule } from "@angular/common";
 
 interface Channel {
   id: string;
@@ -14,13 +15,15 @@ const LOCAL_STORAGE_KEY = 'channels';
   selector: 'app-trending',
   templateUrl: './trending.component.html',
   styleUrls: ['./trending.component.scss'],
+  imports: [CommonModule],
+  standalone: true,
 })
 export class TrendingComponent {
   readonly bannedChannels$ = new BehaviorSubject<Channel[]>(
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]'),
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null') || [],
   );
 
-  readonly videos$ = this.youtubeApi.getTrendingVideos();
+  readonly videos$ = this.trendingService.getTrendingVideos();
 
   readonly filteredVideos$ = combineLatest([
     this.videos$,
@@ -34,7 +37,7 @@ export class TrendingComponent {
           ),
       );
     }),
-    tap(a => {
+    tap(() => {
       // TODO(kirjs): this is terrible / remove.
       requestAnimationFrame(() => {
         ɵdetectChanges(this);
@@ -47,7 +50,7 @@ export class TrendingComponent {
     this.bannedChannels$.next([...current, { id, title }]);
   }
 
-  constructor(private youtubeApi: YoutubeService) {
+  constructor(private trendingService: TrendingService) {
     this.bannedChannels$.subscribe(channels => {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(channels));
     });
