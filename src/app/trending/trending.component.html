@@ -5,9 +5,9 @@
     <h2>
       <a href="https://www.youtube.com/watch?v={{ video.id }}">{{
         video.snippet.title
-      }}</a>
+        }}</a>
     </h2>
-    <img alt="profile pic" [src]="video.snippet.thumbnails.medium.url" />
+    <img alt="profile pic" [src]="video.snippet.thumbnails.medium.url"/>
     <div style="display: flex; justify-content: space-between">
       <div>{{ video.snippet.channelTitle }}</div>
       <button
@@ -18,13 +18,5 @@
         ЗАБАНИТЬ КАНАЛ 🔨
       </button>
     </div>
-  </div>
-</div>
-
-<h1>Banned channels</h1>
-<div *ngFor="let channel of bannedChannels$ | async">
-  <div>
-    <div>{{ channel.title }}</div>
-    <button (click)="unban(channel.id)">Unban</button>
   </div>
 </div>

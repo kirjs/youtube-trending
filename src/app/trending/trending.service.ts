@@ -18,11 +18,10 @@ export class TrendingService {
   constructor(private readonly firestore: Firestore) {
   }
 
-
   getTrendingVideos(): Observable<any> {
     return this.videos$.pipe(map((a: any) => {
       const result = JSON.parse(a.trending);
-      return result?.data?.items || [];
+      return result || [];
     }));
   }
 }

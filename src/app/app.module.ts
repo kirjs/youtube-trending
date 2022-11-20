@@ -3,8 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { TrendingComponent } from "./trending/trending.component";
-import { connectFirestoreEmulator, getFirestore, provideFirestore } from "@angular/fire/firestore";
+import { getFirestore, provideFirestore } from "@angular/fire/firestore";
 import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
+import { LoginComponent } from './login/login.component';
+import { getAuth, provideAuth } from "@angular/fire/auth";
+import { BanListComponent } from './ban-list/ban-list.component';
 
 
 const config = {
@@ -16,20 +19,23 @@ const config = {
   appId: "1:324327221879:web:820b3f534522e7f2a4f472"
 };
 
-
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   imports: [
     BrowserModule,
+    BanListComponent,
     provideFirebaseApp(() => initializeApp(config)),
+    provideAuth(() => getAuth()),
     provideFirestore(() => {
-      const firestore = getFirestore();
-      connectFirestoreEmulator(firestore, 'localhost', 8080);
-      return firestore;
+      return getFirestore();
+      // connectFirestoreEmulator(firestore, 'localhost', 8080);
+      //return firestore;
     }),
-    TrendingComponent
+    TrendingComponent,
+    LoginComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,7 @@
+<h1>Banned channels</h1>
+<div *ngFor="let channel of banService.bannedChannels$ | async">
+  <div>
+    <div>{{ channel.title }}</div>
+    <button (click)="unban(channel.id)">Unban</button>
+  </div>
+</div>
