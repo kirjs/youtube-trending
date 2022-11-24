@@ -25,6 +25,15 @@ export class TrendingService {
       })
   })));
 
+  readonly languages$ = this.videos$.subscribe((videos: any[]) => {
+    const languages = new Set(
+      videos
+        .map(v => v.snippet.defaultLanguage)
+        .filter(l => !!l)
+        .map(l => l.slice(0, 2))
+    );
+  })
+
   constructor(private readonly firestore: Firestore) {
   }
 
