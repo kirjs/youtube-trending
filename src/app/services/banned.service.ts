@@ -39,7 +39,7 @@ export class BannedService implements OnDestroy {
     filter(u => !!u),
     switchMap(user => {
       return docData(userDoc(this.firestore, user!.uid)).pipe(map(a => {
-        return JSON.parse(a['channels'] || '[]') as Channel[];
+        return JSON.parse(a?.['channels'] || '[]') as Channel[];
       }))
     }))
 
@@ -78,7 +78,7 @@ export class BannedService implements OnDestroy {
       take(1),
       takeUntil(this.destroy$),
     ).subscribe(async ([local, remote]) => {
-        const remoteChannels = JSON.parse(remote['channels'] || '[]');
+        const remoteChannels = JSON.parse(remote?.['channels'] || '[]');
         console.log(local, remoteChannels);
         debugger;
         const merged = [...remoteChannels, ...local];
