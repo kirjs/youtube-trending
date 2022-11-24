@@ -1,26 +1,35 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, docData, Firestore } from "@angular/fire/firestore";
-import { from, Observable } from "rxjs";
+import { collection, collectionData, Firestore } from "@angular/fire/firestore";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-
-
-interface Trending {
-  trending: string;
-}
+import { Channel } from "../services/banned.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrendingService {
   readonly videosCollection = collection(this.firestore, 'messages');
-  readonly videos$ = from(docData(doc(this.videosCollection, 'latest')));
+  readonly videos$ = collectionData(this.videosCollection).pipe(map(((data) => {
+    const set = new Set();
+
+    return data
+      .map(a => JSON.parse(a?.['trending'] || '[]'))
+      .reduce((a: Channel[], b) => ([...a, ...b]), [])
+      .filter((a: Channel) => {
+        if (set.has(a.id)) {
+          return false;
+        }
+
+        set.add(a.id);
+        return true;
+      })
+  })));
 
   constructor(private readonly firestore: Firestore) {
   }
 
   getTrendingVideos(): Observable<any> {
-    return this.videos$.pipe(map((a: any) => {
-      const result = JSON.parse(a.trending);
+    return this.videos$.pipe(map((result: any) => {
       return result || [];
     }));
   }
