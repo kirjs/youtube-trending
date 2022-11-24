@@ -79,7 +79,6 @@ export class BannedService implements OnDestroy {
       takeUntil(this.destroy$),
     ).subscribe(async ([local, remote]) => {
         const remoteChannels = JSON.parse(remote?.['channels'] || '[]');
-        console.log(local, remoteChannels);
         debugger;
         const merged = [...remoteChannels, ...local];
         // TODO: dedupe
@@ -88,8 +87,6 @@ export class BannedService implements OnDestroy {
         this.localBannedChannels$.next([]);
       }
     );
-
-    console.log(uid);
   }
 
   banChannel(c: Channel) {
